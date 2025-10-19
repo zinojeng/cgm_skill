@@ -1,0 +1,228 @@
+# CGM 分析技能配置檔案
+# 可根據需求調整預設參數
+
+# 預設分析參數
+defaults:
+  # 目標血糖範圍 (mg/dL)
+  target_range:
+    low: 70
+    high: 180
+
+  # 分析期間 (天數)
+  analysis_period: 14
+
+  # 輸出語言
+  language: zh-TW
+
+  # 時區設定
+  timezone: Asia/Taipei
+
+# 不同族群的預設目標
+population_targets:
+  adult:
+    name: "一般成人"
+    range: [70, 180]
+    tir_goal: 70
+    tbr_limit: 4
+    cv_target: 36
+
+  pediatric:
+    name: "兒童青少年"
+    range: [70, 180]
+    tir_goal: 60
+    tbr_limit: 5
+    cv_target: 36
+
+  elderly:
+    name: "老年患者"
+    range: [70, 180]
+    tir_goal: 50
+    tbr_limit: 1
+    cv_target: 36
+
+  pregnancy:
+    name: "妊娠期"
+    range: [63, 140]
+    tir_goal: 90
+    tbr_limit: 4
+    cv_target: 36
+
+  strict:
+    name: "嚴格控制"
+    range: [70, 140]
+    tir_goal: 50
+    tbr_limit: 4
+    cv_target: 33
+
+# AI 模型設定
+ai_models:
+  # 優先使用的模型
+  preferred: gpt-4o
+
+  # 備用模型 (當優先模型失敗時)
+  fallback: gpt-4o-mini
+
+  # 溫度參數 (0-1, 越高越有創意)
+  temperature: 0.7
+
+  # 最大 token 數
+  max_tokens: 2000
+
+  # 重試次數
+  max_retries: 3
+
+  # 超時設定 (秒)
+  timeout: 30
+
+# 輸出設定
+output:
+  # 支援的輸出格式
+  formats:
+    - markdown
+    - html
+    - pdf
+    - json
+
+  # 預設輸出格式
+  default_format: markdown
+
+  # 圖表類型
+  charts:
+    - agp              # AGP 動態血糖曲線
+    - daily_overlay    # 每日疊加圖
+    - tir_pie         # TIR 圓餅圖
+    - hourly_pattern  # 每小時模式圖
+    - variability     # 變異性分析圖
+
+  # 圖表設定
+  chart_settings:
+    dpi: 300
+    figure_size: [12, 6]
+    font_size: 12
+    color_scheme: "default"
+
+# 數據處理設定
+data_processing:
+  # CGM 數據間隔 (分鐘)
+  cgm_interval: 5
+
+  # 最小數據覆蓋率 (%)
+  min_coverage: 70
+
+  # 異常值處理
+  outlier_detection:
+    enabled: true
+    method: "iqr"  # iqr 或 zscore
+    threshold: 3
+
+  # 缺失值插補
+  imputation:
+    enabled: true
+    method: "linear"  # linear, forward, backward
+    max_gap: 30  # 最大插補間隔(分鐘)
+
+# 檔案路徑設定
+paths:
+  # 輸入資料夾
+  input_dir: "./input"
+
+  # 輸出資料夾
+  output_dir: "./output"
+
+  # 報告資料夾
+  report_dir: "./reports"
+
+  # 暫存資料夾
+  temp_dir: "./temp"
+
+  # 日誌資料夾
+  log_dir: "./logs"
+
+# 警報閾值
+alerts:
+  # 嚴重低血糖
+  severe_hypo:
+    threshold: 54
+    duration: 15  # 分鐘
+
+  # 低血糖
+  hypo:
+    threshold: 70
+    duration: 15
+
+  # 高血糖
+  hyper:
+    threshold: 180
+    duration: 120
+
+  # 嚴重高血糖
+  severe_hyper:
+    threshold: 250
+    duration: 60
+
+  # 快速變化
+  rapid_change:
+    rate: 3  # mg/dL/min
+    duration: 15
+
+# 批次處理設定
+batch_processing:
+  # 啟用批次處理
+  enabled: true
+
+  # 最大並行數
+  max_parallel: 4
+
+  # 批次大小
+  batch_size: 10
+
+  # 進度顯示
+  show_progress: true
+
+# 安全設定
+security:
+  # 資料匿名化
+  anonymize_data: true
+
+  # 移除個人識別資訊
+  remove_pii: true
+
+  # 加密報告
+  encrypt_reports: false
+
+  # API 金鑰儲存
+  api_key_storage: "environment"  # environment, file, keyring
+
+# 日誌設定
+logging:
+  # 日誌等級
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL
+
+  # 日誌格式
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+  # 日誌輪換
+  rotation:
+    enabled: true
+    max_size: "10MB"
+    backup_count: 5
+
+# 開發設定
+development:
+  # 除錯模式
+  debug: false
+
+  # 詳細輸出
+  verbose: false
+
+  # 測試模式
+  test_mode: false
+
+  # 使用範例數據
+  use_sample_data: false
+
+# 版本資訊
+version:
+  skill_version: "1.1.0"
+  config_version: "1.0.0"
+  last_updated: "2024-12-19"
